@@ -73,6 +73,10 @@
     socket.on('userConnected', (message) => {
       console.log(message);
     });
+
+    socket.on('userDisconnected', (message) => {
+      console.log(message);
+    });
   
     </script>
 
