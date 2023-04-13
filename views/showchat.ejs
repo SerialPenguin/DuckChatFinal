@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chatrooms</title>
+    <link rel="stylesheet" href="/showchat.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.6.1/socket.io.js" integrity="sha512-xbQU0+iHqhVt7VIXi6vBJKPh3IQBF5B84sSHdjKiSccyX/1ZI7Vnkt2/8y8uruj63/DVmCxfUNohPNruthTEQA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+</head>
+<body>
+    
+    <h1>Channel: <%= chatroom.name  %></h1>
+
+    <div class="chat-container">
+        <ul>
+          <% for (let post of posts) { %>
+            <li>
+              <span class="post-username"><%= post.username %></span>
+              <span class="post-message"><%= post.message %></span>
+            </li>
+          <% } %>
+        </ul>
+      </div>
+      
+    <div>
+      <form class="form" action="/ducks/api/channel/<%= chatroom._id %>" method="post">
+        <input name="username" id="username" type="text" placeholder="Name">
+        <input name="message" id="message" type="text" placeholder="Message">
+        <button id="send">Send</button>
+      </form>
+    </div>
+
+    <h1>Broadcasts</h1>
+      
+    <div class="chat-container">
+      <ul>
+        <% for (let broadcast of broadcasts) { %>
+          <li>
+            <span class="broadcast-username"><%= broadcast.username %></span>
+            <span class="broadcast-message"><%= broadcast.message %></span>
+          </li>
+        <% } %>
+      </ul>
+    </div>
+    
+    <div class="delete-button">
+      <form action="/ducks/api/channel/<%=chatroom._id%>?_method=DELETE" method="post">
+        <button>Delete this Chatroom! (Admin only)</button>
+      </form>
+    </div>
+    
+    <div class="option-buttons">
+      <button onclick="location.href='/ducks/api/channel'">Back to all channels</button>
+      <button onclick="location.href='/logout'">Log out</button>
+      <button onclick="location.href='/ducks/api/broadcast'">Broadcast (Admin only)</button>
+    </div>
+
+    <script>
+    const socket = io(); // connect to the server
+
+    // Log when a user connects
+    socket.on('connect', () => {
+      console.log('User connected');
+    });
+    
+    // Log when a user disconnects
+    socket.on('disconnect', () => {
+      console.log('User disconnected');
+    });
+    
+    // Listen for 'new user' event from the server
+    socket.on('userConnected', (message) => {
+      console.log(message);
+    });
+  
+    </script>
+
+</html>
