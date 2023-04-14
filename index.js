@@ -182,7 +182,6 @@ app.put("/ducks/api/channel", verifyToken, async (req, res) => {
         res.redirect(`/ducks/api/channel/${chatroom._id}`);
       }
     } else {
-      console.log("Chatroom with this name already exists.");
       return res.status(409).send("Chatroom with this name already exists.");
     }
   } catch (err) {
